@@ -3,13 +3,9 @@
 import numpy as np
 import math
 from scipy.integrate import quad
-import mpmath as mpm
-from datetime import datetime 
-from matplotlib import pyplot as plt
+from constants import *
 
-eps = 0.00001 # погрешность -- 0.001%
-a_0 = 1 # нулевой момент
-a = 0.1 # параметр фойгтовского профиля 
+
 
 # почти функция ошибок (ф.24-25)
 def Phi(x):
@@ -141,8 +137,11 @@ def a_wave_beta(a, l, b):
 	return f
 
 
-# коэффициенты c^S_j (ф.34)
 def c_S(a, j, b):
+	'''
+	Coefficient c^S_j for K and L (f.34)
+	'''
+	
 	f = 0
 	for m in range(j+2):
 		f += a_l(a, j+2-m) * b**m / math.factorial(m) / math.factorial(j+1-m)
@@ -152,8 +151,11 @@ def c_S(a, j, b):
 	return f
 
 
-# коэффициенты c^E_j (ф.34)
 def c_E(a, j, b):
+	'''
+	Coefficient c^E_j for K_0 and L_0 (f.34)
+	'''
+
 	f = 0
 	for m in range(j+2):
 		f += a_l(a, j+1-m) * b**m / math.factorial(m) / math.factorial(j+1-m)
@@ -166,77 +168,44 @@ def c_E(a, j, b):
 # первый момент (ф.40)
 a_1 = np.sqrt(2) * Phi(a*np.sqrt(2)) / np.pi / U_0(a)
 
-# l=2
-# x =  [i for i in range(4,20,1)]
-# # x = [i for i in range(1,30,1)]
-# for xx in x:
-# 	an = Phi_anal(xx)
-# 	asy18 = Phi_asymp(xx)
-# 	# asy20 = E_12_asymp_20(xx)
-# 	print(xx)
-# 	print(an)
-# 	print(asy18)
-# 	# print(asy20)
-# 	print(abs(an-asy18))
-# 	# print(abs(an-asy20))
-# 	print("-----------------")
+
+def K_wave(a, t, b):
+	'''
+	Series expansion of the K = K_11 function (f.30)
+	Returns: 
+		K(\\tau,\\beta) + a_1 * ln(\\tau)
+	'''
+
+	f = -a_1 * C_E - a_wave_beta(a, 1, b)
+	j = 0
+
+	while True:
+		s = c_S(a, j, b) * t**(j+1)
+
+		if abs(s/f) < eps: break 
+								
+		f += s
+		j += 1
+
+	return f
 
 
+def K_0_wave(a, t, b):
+	'''
+	Series expansion of the K_0 = K_10 function (f.31).
+	Returns: 
+		K_0(\\tau,\\beta) + ln(\\tau)
+	'''
 
-# x = [i/100 for i in range(0, 1001, 25)]
-t = [i/10 for i in range(0, 21, 2)]
+	f = -C_E - a_wave_beta(a, 0, b)
+	j = 0
 
-# print(t)
+	while True:
+		s = c_E(a, j, b) * t**(j+1)
 
-for xx in 10*np.exp(t):
-	print(xx, round(U(a,xx),10))
-	# print(round(xx,3))
-	# print(U(a,xx))
-	# print(U2(a,xx))
-	print("-----------------")
+		if abs(s/f) < eps: break 
+								
+		f += s
+		j += 1
 
-# x = [i for i in range(1,100)]
-# u = [] # асимптотика ...
-# u2 = [] # точная ---
-# for xx in x:
-# 	u.append(U(a,xx))
-# 	u2.append( U2(a,xx))
-
-# plt.plot(x, u, ".", x, u2, "-")
-# plt.show()
-# f = list(range(6,0,-2))
-# print(math.prod(range(-1,0,-2)))
-# print(math.prod(range(5,0,-2)))
-# print(E_12(10))
-# # x= 5
-# now0 = datetime.now()
-# print(Phi(2000))
-# now = datetime.now()
-# print(now-now0)
-
-# now0 = datetime.now()
-# print(Phi2(2000))
-# now = datetime.now()
-# print(now-now0)
-# # print(funk(20))
-# # print(quad((ff)**3, 1, 5, 4))
-# print(a_l(1,3))
-# # print(a_l2(1,3))
-# # print(quad(a_l_int, -5, 3, args=(2,3)))
-# x = 0.1
-# print(a_0)
-# print(a_l(a,0))
-# print("------------")
-# print(a_1)
-# print(a_l(a,1))
-# print("------------")
-# print("------------")
-# now0 = datetime.now()
-# print(a_wave_beta(a,0,1000005))
-# now = datetime.now()
-# print(now-now0)
-# print("------------")
-# now0 = datetime.now()
-# print(a_l(a,0)*np.log(1000005))
-# now = datetime.now()
-# print(now-now0)
+	return f
