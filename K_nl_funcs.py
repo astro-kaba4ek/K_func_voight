@@ -36,7 +36,7 @@ def K(a, t, b):
 
 	f = -a_1(a) * (np.log(t) + C_E) - a_wave_beta(a, 1, b)
 	j = 0
-
+	
 	while True:
 		s = c_S(a, j, b) * t**(j+1)
 
@@ -74,7 +74,7 @@ def K_0(a, t, b):
 	j = 0
 
 	while True:
-		s = c_S(a, j, b) * t**(j+1)
+		s = c_E(a, j, b) * t**(j+1)
 
 		if abs(s/f) < eps: break 
 								

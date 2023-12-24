@@ -19,12 +19,17 @@ def K_analyt(a, t, b):
 
 	U_0_a = U_0(a)
 
-	f, err = dblquad(lambda y, x, a, t, b: U(a, x)**2 * np.exp(-(U(a,x)/U_0_a + b) * t / y) / y, -np.inf, np.inf, 0, 1, args=(a,t,b))
+	f, err = dblquad(lambda y, x, a, t, b: (U(a, x)/U_0_a)**2 * np.exp(-(U(a,x)/U_0_a + b) * t / y) / y, -np.inf, np.inf, 0, 1, args=(a,t,b))
+
+	f *= U_0_a
+	err *= U_0_a
+
+	# f, err = dblquad(lambda y, x, a, t, b: U_0_a * (U(a, x)/U_0_a)**2 * np.exp(-(U(a,x)/U_0_a + b) * t / y) / y, -np.inf, np.inf, 0, 1, args=(a,t,b))
+
 
 	if (abs(err/f) > eps):
-		print(f"The error in calculating the analytical function K_analyt is too large. K_analyt={f / U_0_a}, err={err}")
+		print(f"# The error in calculating the analytical function K_analyt is too large. K_analyt={f}, err={err}")
 
-	f /= U_0_a
 
 	return f	
 
@@ -34,10 +39,13 @@ def K_0_analyt(a, t, b):
 
 	U_0_a = U_0(a)
 
-	f, err = dblquad(lambda y, x, a, t, b: U(a, x) * np.exp(-(U(a,x)/U_0_a + b) * t / y) / y, -np.inf, np.inf, 0, 1, args=(a,t,b))
+	f, err = dblquad(lambda y, x, a, t, b: U(a, x)/U_0_a * np.exp(-(U(a,x)/U_0_a + b) * t / y) / y, -np.inf, np.inf, 0, 1, args=(a,t,b))
+
+	f *= U_0_a
+	err *= U_0_a
 
 	if (abs(err/f) > eps):
-		print(f"The error in calculating the analytical function K_0_analyt is too large. K_0_analyt={f / U_0_a}, err={err}")
+		print(f"# The error in calculating the analytical function K_0_analyt is too large. K_0_analyt={f}, err={err}")
 
 	return f	
 
@@ -47,13 +55,16 @@ def L_analyt(a, t, b):
 
 	U_0_a = U_0(a)
 
-	f, err = dblquad(lambda y, x, a, t, b: U(a, x)**2 / (U(a,x)/U_0_a + b) * np.exp(-(U(a,x)/U_0_a + b) * t / y) / y, -np.inf, np.inf, 0, 1, args=(a,t,b))
+	f, err = dblquad(lambda y, x, a, t, b: (U(a, x)/U_0_a)**2 / (U(a,x)/U_0_a + b) * np.exp(-(U(a,x)/U_0_a + b) * t / y), -np.inf, np.inf, 0, 1, args=(a,t,b))
+
+	f *= U_0_a
+	err *= U_0_a
+
+	# f, err = dblquad(lambda y, x, a, t, b: U_0_a * (U(a, x)/U_0_a)**2 / (U(a,x)/U_0_a + b) * np.exp(-(U(a,x)/U_0_a + b) * t / y), -np.inf, np.inf, 0, 1, args=(a,t,b))
 
 	if (abs(err/f) > eps):
-		print(f"The error in calculating the analytical function L_analyt is too large. L_analyt={f / U_0_a}, err={err}")
+		print(f"# The error in calculating the analytical function L_analyt is too large. L_analyt={f}, err={err}")
 
-	f /= U_0_a
-	
 	return f	
 
 
@@ -62,9 +73,12 @@ def L_0_analyt(a, t, b):
 
 	U_0_a = U_0(a)
 
-	f, err = dblquad(lambda y, x, a, t, b: U(a, x) / (U(a,x)/U_0_a + b) * np.exp(-(U(a,x)/U_0_a + b) * t / y) / y, -np.inf, np.inf, 0, 1, args=(a,t,b))
+	f, err = dblquad(lambda y, x, a, t, b: U(a, x)/U_0_a / (U(a,x)/U_0_a + b) * np.exp(-(U(a,x)/U_0_a + b) * t / y), -np.inf, np.inf, 0, 1, args=(a,t,b))
+	
+	f *= U_0_a
+	err *= U_0_a
 
 	if (abs(err/f) > eps):
-		print(f"The error in calculating the analytical function L_0_analyt is too large. L_0_analyt={f / U_0_a}, err={err}")
+		print(f"# The error in calculating the analytical function L_0_analyt is too large. L_0_analyt={f}, err={err}")
 
 	return f	

@@ -111,11 +111,12 @@ def U(a, x):
 		else: # (f.37)
 			f, err = quad(lambda y, a, x: np.exp(-y**2) / ((x-y)**2 + a**2), -np.inf, np.inf, args=(a,x))
 
-			if (abs(err/f) > eps):
-				print(f"The error in calculating the Voigt function U({a},{x}) is too large. U={f * a / np.pi**(3/2)}, err={err}")
-				
 			f = f * a / np.pi**(3/2)
+			err = err * a / np.pi**(3/2)
 
+			if (abs(err/f) > eps):
+				print(f"# The error in calculating the Voigt function U({a},{x}) is too large. U={f}, err={err}")
+				
 	return f
 
 
@@ -128,13 +129,16 @@ def a_l(a, l):
 		f = a_1(a)
 	else:
 		U_0_a = U_0(a)
+		
+		f, err = quad(lambda x, a, l: U_0_a * (U(a,x)/U_0_a)**(l+1), -np.inf, np.inf, args=(a,l))
 
-		f, err = quad(lambda x, a, l: U(a,x)**(l+1), -np.inf, np.inf, args=(a,l))
+		# f, err = quad(lambda x, a, l: (U(a,x)/U_0_a)**(l+1), -np.inf, np.inf, args=(a,l))
+
+		# f *= U_0_a
+		# err *= U_0_a
 
 		if (abs(err/f) > eps):
-			print(f"The error in calculating the moment of the a_{l} profile is too large. a_{l}={f / U_0_a**l}, err={err}")
-
-		f /= U_0_a**l
+			print(f"# The error in calculating the moment of the a_{l} profile is too large. a_{l}={f}, err={err}")
 
 	return f
 
@@ -148,12 +152,14 @@ def a_wave_beta(a, l, b):
 	else:
 		U_0_a = U_0(a)
 
-		f, err = quad(lambda x, a, l, b: U(a,x)**(l+1) * np.log(U(a,x)/U_0_a+b), -np.inf, np.inf, args=(a,l,b))
+		f, err = quad(lambda x, a, l, b: (U(a,x)/U_0_a)**(l+1) * np.log(U(a,x)/U_0_a+b), -np.inf, np.inf, args=(a,l,b))
+
+		f *= U_0_a
+		err *= U_0_a
+		# f, err = quad(lambda x, a, l, b: U_0_a * (U(a,x)/U_0_a)**(l+1) * np.log(U(a,x)/U_0_a+b), -np.inf, np.inf, args=(a,l,b))
 
 		if (abs(err/f) > eps):
-			print(f"The error in calculating the moment of the a_wave_{l} profile is too large. a_wave_{l}={f / U_0_a**l}, err={err}")
-
-		f /= U_0_a**l
+			print(f"# The error in calculating the moment of the a_wave_{l} profile is too large. a_wave_{l}={f}, err={err}")
 
 	return f
 
@@ -166,10 +172,13 @@ def delta_analyt(a, b):
 	else:
 		U_0_a = U_0(a)
 
-		f, err = quad(lambda x, a, b: U(a,x) / (U(a,x)/U_0_a+b), -np.inf, np.inf, args=(a,b))
+		f, err = quad(lambda x, a, b: U(a,x)/U_0_a / (U(a,x)/U_0_a+b), -np.inf, np.inf, args=(a,b))
+
+		f *= U_0_a
+		err *= U_0_a
 
 		if (abs(err/f) > eps):
-			print(f"The error in calculating the moment of the \\delta(\\beta) profile is too large. \\delta(\\beta)={f}, err={err}")
+			print(f"# The error in calculating the moment of the \\delta(\\beta) profile is too large. \\delta(\\beta)={f}, err={err}")
 
 	return f
 
@@ -187,12 +196,12 @@ def delta(a, b):
 		f1, err1 = quad(lambda x, a, b: U(a,x) / (U(a,x) + b*U_0_a), 0, 10, args=(a,b))
 
 		if (abs(err1/f1) > eps):
-			print(f"The error in calculating f1 (первое слагаемое \\delta2) is too large. f1={f1}, err={err1}")
+			print(f"# The error in calculating f1 (first term \\delta2) is too large. f1={f1}, err={err1}")
 
 		f2, err2 = quad(lambda t, a, b: U(a,10*np.exp(t)) * np.exp(t) / (U(a,10*np.exp(t)) + b*U_0_a), 0, t0, args=(a,b))
 
 		if (abs(err2/f2) > eps):
-			print(f"The error in calculating f2 (второе слагаемое \\delta2) is too large. f2={f2}, err={err2}")
+			print(f"# The error in calculating f2 (second term \\delta2) is too large. f2={f2}, err={err2}")
 
 		f = 2 * U_0_a * (f1 + 10*f2 + np.sqrt(a/b/U_0_a) * np.arctan(np.sqrt(a) / np.sqrt(b*U_0_a) / 10 / np.exp(t0)))
 
@@ -204,6 +213,12 @@ def c_S(a, j, b):
 
 	global a_l_arr
 	
+	if not ("par_a" in a_l_arr):
+		a_l_arr["par_a"] = a
+	elif "par_a" in a_l_arr and a != a_l_arr.get("par_a"):
+		a_l_arr = {}
+		a_l_arr["par_a"] = a
+
 	f = 0
 	for m in range(j+2):
 		l = f"a_{j+2-m}"
@@ -225,9 +240,15 @@ def c_E(a, j, b):
 
 	global a_l_arr
 
+	if not ("par_a" in a_l_arr):
+		a_l_arr["par_a"] = a
+	elif "par_a" in a_l_arr and a != a_l_arr.get("par_a"):
+		a_l_arr = {}
+		a_l_arr["par_a"] = a
+
 	f = 0
 	for m in range(j+2):
-		l = f"a_{j+2-m}"
+		l = f"a_{j+1-m}"
 		if l in a_l_arr:
 			al = a_l_arr.get(l)
 		else:

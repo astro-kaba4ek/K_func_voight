@@ -1,8 +1,6 @@
-3                 ! если не 0 (k) - далее массив из k значений, если 0 - от b_1 до b_N N равномерно расположенных точек в промежутке
-0 0.1 1           ! b
-0                 ! если не 0 (k) - далее массив из k значений, если 0 - от \tau_1 до \tau_N N равномерно расположенных точек в промежутке
-0 0.03 3          ! \tau
-
-
-3                 ! если не 0 (k) - далее массив из k значений, если 0 - от a_1 до a_N N равномерно расположенных точек в промежутке
+3                 ! if not 0 (k), then an array of k values, if 0 - from a_1 to a_N N evenly spaced points in the interval
 0.001 0.01 0.1    ! a
+3                 ! if not 0 (k), then an array of k values, if 0 - from b_1 to b_N N evenly spaced points in the interval
+0 0.1 1           ! b
+0                 ! if not 0 (k), then an array of k values, if 0 - from \tau_1 to \tau_N N evenly spaced points in the interval
+0 0.1 10          ! \tau
