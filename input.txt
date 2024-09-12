@@ -2,5 +2,5 @@
 0.001 0.01 0.1    ! a
 3                 ! if not 0 (k), then an array of k values, if 0 - from b_1 to b_N N evenly spaced points in the interval
 0 0.1 1           ! b
-0                 ! if not 0 (k), then an array of k values, if 0 - from \tau_1 to \tau_N N evenly spaced points in the interval
-0 0.1 10          ! \tau
+0                 ! if not 0 (k), then an array of k values, if 0 - from t_1 to t_N N evenly spaced points in the interval
+0 0.1 10          ! t

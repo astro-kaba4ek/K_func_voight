@@ -10,7 +10,18 @@ from constants import *
 
 
 def Phi(x):
-	r""""Almost" error function (f.24-25)"""
+	r""""Almost" error function (f.24-25). Related to `E_12(x)`.
+
+	Parameters
+	----------
+	x : _float_
+		`x` Function argument
+
+	Returns
+	-------
+	float
+		`\Phi(x)`
+	"""
 
 	if (abs(x) >= 15): # asymptotic testing for VERY LARGE x (f.25)
 		f = 1 / 2 / x
@@ -29,7 +40,18 @@ def Phi(x):
 
 
 def E_12(x):
-	r"""Integral exponential function E_1/2 (f.18,20-22)"""
+	r"""Integral exponential function E_1/2 (f.18,20-22). Related to `\Phi(x)`.
+
+	Parameters
+	----------
+	x : _float_
+		`x` Function argument
+
+	Returns
+	-------
+	float
+		`E_1/2(x)`
+	"""
 
 	if (abs(x) >= 5): # asymptotic testing for LARGE x (f.20-22)
 		n = 1
@@ -71,13 +93,35 @@ def E_12(x):
 
 
 def U_0(a):
-	r"""Profile normalization constant (f.38)"""
+	"""Profile normalization constant (f.38).
+
+	Parameters
+	----------
+	a : _float_
+		`a` Task parameter
+
+	Returns
+	-------
+	float
+		`U(a,0)` Voigt function `U(a,x=0)`. Constant that depends on the task parameter
+	"""
 
 	return 2 * Phi(a) / np.pi
 
 
 def a_1(a):
-	r"""The first moment (f.40)"""
+	"""The first profile moment (f.40).
+
+	Parameters
+	----------
+	a : _float_
+		`a` Task parameter
+
+	Returns
+	-------
+	float
+		`a_1` Constant that depends on the task parameter
+	"""
 
 	f = np.sqrt(2) * Phi(a*np.sqrt(2)) / np.pi / U_0(a)
 
@@ -85,7 +129,20 @@ def a_1(a):
 
 
 def U(a, x):
-	r"""Voigt function (f.37,39)"""
+	"""Voigt function (f.37,39).
+
+	Parameters
+	----------
+	a : _float_
+		`a` Task parameter
+	x : _float_
+		`x` Function argument
+
+	Returns
+	-------
+	float
+		`U(a,x)` Voigt function 
+	"""
 
 	if (a == 0): # Doppler profile
 		f = np.exp(-x**2) / np.sqrt(np.pi)
@@ -121,7 +178,20 @@ def U(a, x):
 
 
 def a_l(a, l):
-	r"""Calculation of the profile moment a_l (f.12)"""
+	"""Calculation of the profile moment a_l (f.12).
+
+	Parameters
+	----------
+	a : _float_
+		`a` Task parameter
+	l : _float, l>0_
+		`l` Function argument
+
+	Returns
+	-------
+	float
+		`a_l`
+	"""
 
 	if l == 0:
 		f = a_0
@@ -144,7 +214,22 @@ def a_l(a, l):
 
 
 def a_wave_beta(a, l, b):
-	r"""Calculation of the profile moment a_wave_l_beta (f.15)"""
+	r"""Calculation of the profile moment a_wave_l(\beta) (f.15).
+
+	Parameters
+	----------
+	a : _float_
+		`a` Task parameter
+	l : _float, l>0_
+		`l` Function argument
+	b : _float_
+		`\beta` The ratio of absorption coefficients in the continuum and the center of the line. Task parameter
+
+	Returns
+	-------
+	float
+		`a_wave_l(\beta)`
+	"""
 
 	if (abs(b) >= 1e9): # asymptotics 
 		f = a_l(a, l) * np.log(b)
@@ -165,7 +250,20 @@ def a_wave_beta(a, l, b):
 
 
 def delta_analyt(a, b):
-	r"""Calculation of the profile moment \delta(\beta) (f.14')"""
+	r"""Analytical calculation of the profile moment \delta(\beta) = a_1,0 (f.14').
+
+	Parameters
+	----------
+	a : _float_
+		`a` Task parameter
+	b : _float_
+		`\beta` The ratio of absorption coefficients in the continuum and the center of the line. Task parameter
+
+	Returns
+	-------
+	float
+		`\delta(\beta)` The special designation for profile moment `a_1,0`
+	"""
 
 	if (abs(b) >= 1e9): # asymptotics 
 		f = a_1(a)
@@ -184,7 +282,20 @@ def delta_analyt(a, b):
 
 
 def delta(a, b):
-	r"""Numerical calculation of the profile moment \delta(\beta) (f.41)"""
+	r"""Numerical calculation of the profile moment \delta(\beta) = a_1,0 (f.41).
+
+	Parameters
+	----------
+	a : _float_
+		`a` Task parameter
+	b : _float_
+		`\beta` The ratio of absorption coefficients in the continuum and the center of the line. Task parameter
+
+	Returns
+	-------
+	float
+		`\delta(\beta)` The special designation for profile moment `a_1,0`
+	"""
 
 	t0 = 100
 
@@ -209,7 +320,22 @@ def delta(a, b):
 
 
 def c_S(a, j, b):
-	r"""Coefficient c^S_j for K and L (f.34)"""
+	r"""Coefficient c^S_j for K and L (f.34).
+
+	Parameters
+	----------
+	a : _float_
+		`a` Task parameter
+	j : _int, j>0_
+		`j` Function argument
+	b : _float_
+		`\beta` The ratio of absorption coefficients in the continuum and the center of the line. Task parameter
+
+	Returns
+	-------
+	float
+		`c^S_j(\beta)` Coefficient for K and L
+	"""
 
 	global a_l_arr
 	
@@ -236,7 +362,22 @@ def c_S(a, j, b):
 
 
 def c_E(a, j, b):
-	r"""Coefficient c^E_j for K_0 and L_0 (f.34)"""
+	r"""Coefficient c^E_j for K_0 and L_0 (f.34).
+
+	Parameters
+	----------
+	a : _float_
+		`a` Task parameter
+	j : _int, j>0_
+		`j` Function argument
+	b : _float_
+		`\beta` The ratio of absorption coefficients in the continuum and the center of the line. Task parameter
+
+	Returns
+	-------
+	float
+		`c^E_j(\beta)` Coefficient for K_0 and L_0
+	"""
 
 	global a_l_arr
 

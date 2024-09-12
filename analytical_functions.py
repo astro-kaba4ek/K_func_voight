@@ -15,7 +15,22 @@ from calculation_functions import U_0, U
 
 
 def K_analyt(a, t, b):
-	r"""Analytical function K = K_11 (f.2)"""
+	r"""Analytical function K = K_11 (f.2).
+
+	Parameters
+	----------
+	a : _float_
+		`a` Task parameter
+	t : _float_
+		`\tau` The optical distance. Task parameter
+	b : _float_
+		`\beta` The ratio of absorption coefficients in the continuum and the center of the line. Task parameter
+
+	Returns
+	-------
+	float
+		`K(\tau,\beta)`
+	"""
 
 	U_0_a = U_0(a)
 
@@ -35,7 +50,22 @@ def K_analyt(a, t, b):
 
 
 def K_0_analyt(a, t, b):
-	r"""Analytical function K_0 = K_10 (f.3)"""
+	r"""Analytical function K_0 = K_10 (f.3).
+
+	Parameters
+	----------
+	a : _float_
+		`a` Task parameter
+	t : _float_
+		`\tau` The optical distance. Task parameter
+	b : _float_
+		`\beta` The ratio of absorption coefficients in the continuum and the center of the line. Task parameter
+
+	Returns
+	-------
+	float
+		`K_0(\tau,\beta)`
+	"""
 
 	U_0_a = U_0(a)
 
@@ -51,7 +81,22 @@ def K_0_analyt(a, t, b):
 
 
 def L_analyt(a, t, b):
-	r"""Analytical function L = K_21 (f.4)"""
+	r"""Analytical function L = K_21 (f.4).
+
+	Parameters
+	----------
+	a : _float_
+		`a` Task parameter
+	t : _float_
+		`\tau` The optical distance. Task parameter
+	b : _float_
+		`\beta` The ratio of absorption coefficients in the continuum and the center of the line. Task parameter
+
+	Returns
+	-------
+	float
+		`L(\tau,\beta)`
+	"""
 
 	U_0_a = U_0(a)
 
@@ -69,7 +114,22 @@ def L_analyt(a, t, b):
 
 
 def L_0_analyt(a, t, b):
-	r"""Analytical function L_0 = K_20 (f.5)"""
+	r"""Analytical function L_0 = K_20 (f.5).
+
+	Parameters
+	----------
+	a : _float_
+		`a` Task parameter
+	t : _float_
+		`\tau` The optical distance. Task parameter
+	b : _float_
+		`\beta` The ratio of absorption coefficients in the continuum and the center of the line. Task parameter
+
+	Returns
+	-------
+	float
+		`L_0(\tau,\beta)`
+	"""
 
 	U_0_a = U_0(a)
 

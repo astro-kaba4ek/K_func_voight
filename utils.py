@@ -7,10 +7,16 @@ import matplotlib.pyplot as plt
 
 
 def create_parser():
-	r"""Creating an argument parser."""
+	r"""Creating an argument parser.
+
+	Returns
+	-------
+	ArgumentParser
+		A function for creating an object for parsing arguments of this program
+	"""
 
 	parser = argparse.ArgumentParser(
-		description="""A program for calculating the core functions K, K_0, L and L_0 for the Voigt absorption profile \
+		description="""The program for calculating the core functions K, K_0, L and L_0 for the Voigt absorption profile \
 					depending on the parameters a, \\beta and \\tau. \
 			 		The program is not able to calculate values for large (depending on a and \\beta) \\tau, due to the peculiarities \
 					of the formulas used and the overflow of variables. Use carefully when \\tau is greater than ~10. Accuracy ~1e-5.""",
@@ -35,8 +41,17 @@ def create_parser():
 
 
 def create_a_b_t_arrays(args):
-	r"""
-	Reading the input-file, setting parameters from the console, or using default parameters.
+	r"""Reading the input-file, setting parameters from the console, or using default parameters.
+
+	Parameters
+	----------
+	args : _Namespace_
+		Arguments of main program
+
+	Returns
+	-------
+	Array[float], Array[float], Array[float]
+		`a_array, \beta_array, \tau_array` Arrays of task parameters 
 	"""
 
 	try:
@@ -74,7 +89,18 @@ def create_a_b_t_arrays(args):
 
 
 def get_stdout(command):
-	r"""Running third-party commands and saving the standard output."""
+	"""Running third-party commands and saving the standard output.
+
+	Parameters
+	----------
+	command : _str_
+		The command to run in the console
+
+	Returns
+	-------
+	str
+		Standard output after processing the command
+	"""
 
 	res = subprocess.run(command, 
 		      			stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
@@ -84,7 +110,19 @@ def get_stdout(command):
 
 
 def save_results(res_dict, a_array, b_array, t_array):
-	r"""Saving the results to files."""
+	r"""Saving the results to files.
+
+	Parameters
+	----------
+	res_dict : _dict[float]_
+		Dictionary of solutions
+	a_array : _Array[float]_
+		`a_array` Arrays of task parameter
+	b_array : _Array[float]_
+		`\beta_array` Arrays of task parameter
+	t_array : _Array[float]_
+		`\tau_array` Arrays of task parameter
+	"""
 
 	print()
 	print("# Create the results directory:")
@@ -123,7 +161,21 @@ def save_results(res_dict, a_array, b_array, t_array):
 
 
 def plot_results(res_dict, t_array, fun, a, b):
-	r"""Plotting and saving graphs."""
+	r"""Plotting and saving graphs.
+
+	Parameters
+	----------
+	res_dict : _dict[float]_
+		Dictionary of solutions
+	t_array : _Array[float]_
+		`\tau_array` Arrays of task parameter
+	fun : _str_
+		The type of function displayed
+	a : _float_
+		`a` Task parameter
+	b : _float_
+		`\beta` The ratio of absorption coefficients in the continuum and the center of the line. Task parameter
+	"""
 
 	# print()
 	# print("# Create the results directory:")
